@@ -198,6 +198,7 @@ function autocomplete (el, options = {}) {
     defaultSetter,
     retarget,
     attachment,
+    runSource,
     source: []
   });
 
@@ -229,13 +230,17 @@ function autocomplete (el, options = {}) {
     if (eye) { eye.refresh(); }
   }
 
-  function loading (forceShow) {
+  function runSource () {
+    loading(true, true);
+  }
+
+  function loading (forceShow, retrySameQueries) {
     if (typeof source !== 'function') {
       return;
     }
     crossvent.remove(attachment, 'focus', loading);
     const query = readInput();
-    if (query === state.query) {
+    if (query === state.query && !retrySameQueries) {
       return;
     }
     hasItems = false;
